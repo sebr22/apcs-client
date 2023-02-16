@@ -19,8 +19,8 @@ public class ShowDbChanges implements Runnable {
 
       public void onDataChange(DataSnapshot dataSnapshot) {
         Object document = dataSnapshot.getValue();
-        System.out.println(document);
-        // ob = document;
+        Main.obj=document;
+        Main.update();
       }
 
       public void onCancelled(DatabaseError error) {
