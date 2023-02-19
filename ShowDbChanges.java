@@ -1,4 +1,5 @@
 import com.google.firebase.database.*;
+import java.util.*;
 
 import java.io.IOException;
 
@@ -10,7 +11,7 @@ public class ShowDbChanges implements Runnable {
     try {
       fbs = new FireBaseService();
     } catch (IOException e) {
-      e.printStackTrace();
+      // e.printStackTrace();
     }
 
     DatabaseReference ref = fbs.getDb()
@@ -18,13 +19,14 @@ public class ShowDbChanges implements Runnable {
     ref.addValueEventListener(new ValueEventListener() {
 
       public void onDataChange(DataSnapshot dataSnapshot) {
+        // System.out.println(dataSnapshot.getValue());
         Object document = dataSnapshot.getValue();
-        Main.obj=document;
+        Main.obj = document;
         Main.update();
       }
 
       public void onCancelled(DatabaseError error) {
-        System.out.print("Error: " + error.getMessage());
+        // System.out.print("Error: " + error.getMessage());
       }
     });
 
