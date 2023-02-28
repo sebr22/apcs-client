@@ -46,12 +46,12 @@ public class Main {
       @Override
       public void run() {
         try {
-          TimeUnit.SECONDS.sleep(5);
+          TimeUnit.SECONDS.sleep(10);
         } catch (InterruptedException e) {}
         Scanner scanner = new Scanner(System.in);
         while (true) {
-          System.out.println(((Map<?, ?>) obj).size());
-          pwrite(((Map<?, ?>) obj).size()+1, scanner.nextLine());
+          // System.out.println(((Map<?, ?>) obj).size());
+          pwrite(((Map<?, ?>) obj).size()+2, scanner.nextLine());
         }
       }
     };
