@@ -1,39 +1,42 @@
+// TODO:
+// The command line is currently only tooled to take messages.
+// It would be preferable for there to be a 
 
-// import com.google.auth.oauth2.GoogleCredentials;
-// import com.google.firebase.FirebaseApp;
-// import com.google.firebase.FirebaseOptions;
-// import com.google.firebase.database.DatabaseReference;
-// import com.google.firebase.database.FirebaseDatabase;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.*;
 
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.entity.ContentType;
+//post
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-
-import java.util.concurrent.TimeUnit;
+import org.apache.http.client.methods.HttpPost;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.Map;
 
 public class Main {
   public static Object obj;
+  public static ArrayList<String> list = new ArrayList<String>();
 
   public static void update() {
-    System.out.println(obj);
+ArrayList<String> temp = new ArrayList<>();
+// get all the values from the HashMap
+Collection<ArrayList<String>> values = ((HashMap<String, ArrayList<String>>) obj).values();
+for (ArrayList<String> value : values) {
+  // check if the value has at least two elements
+  if (value.size() >= 2) {
+    // get the second element and add it to list
+    String second = value.get(1);
+    temp.add(second);
+  }
+}
+    // ONLY ADDS NEW ELEMENTS
+    temp.removeAll(list);
+    list.addAll(temp);
 
+    System.out.println(list);
   }
 
   public static void main(String[] args) {
@@ -45,14 +48,9 @@ public class Main {
     Runnable scannerRunnable = new Runnable() {
       @Override
       public void run() {
-        try {
-          TimeUnit.SECONDS.sleep(10);
-        } catch (InterruptedException e) {}
         Scanner scanner = new Scanner(System.in);
         while (true) {
-          if (obj!=null) {
-          pwrite(((Map<?, ?>) obj).size()+1, scanner.nextLine());
-          }
+          post(scanner.nextLine());
         }
       }
     };
@@ -68,33 +66,17 @@ public class Main {
 
   }
 
-  public static void pwrite(int key, String str) {
-    CloseableHttpClient httpclient = HttpClients.createDefault();
-    HttpPatch httpPatch = new HttpPatch("https://apcs-d25a1-default-rtdb.firebaseio.com/.json");
-
-    String json = "{\" " + key + " \": \" " + str + " \"}";
-    StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
-    httpPatch.setEntity(entity);
-
-    CloseableHttpResponse response = null;
+  public static void post(String str) {
     try {
-      response = httpclient.execute(httpPatch);
-      HttpEntity responseEntity = response.getEntity();
-      if (responseEntity != null) {
-        // System.out.println(EntityUtils.toString(responseEntity,
-        // StandardCharsets.UTF_8));
-      }
-    } catch (IOException e) {
-      // e.printStackTrace();
-    } finally {
-      try {
-        if (response != null) {
-          response.close();
-        }
-        httpclient.close();
-      } catch (IOException e) {
-        // e.printStackTrace();
-      }
+      HttpClient client = HttpClientBuilder.create().build();
+      HttpPost post = new HttpPost("https://apcs-d25a1-default-rtdb.firebaseio.com/.json");
+      // post.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      StringEntity entity = new StringEntity("{\"1\": \"" + str + "\"}");
+      post.setEntity(entity);
+
+      HttpResponse response = client.execute(post);
+    } catch (Exception e) {
+      System.out.println("THERE WAS AN ERROR");
     }
   }
 }
