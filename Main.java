@@ -50,8 +50,9 @@ public class Main {
         } catch (InterruptedException e) {}
         Scanner scanner = new Scanner(System.in);
         while (true) {
-          // System.out.println(((Map<?, ?>) obj).size());
-          pwrite(((Map<?, ?>) obj).size()+2, scanner.nextLine());
+          if (obj!=null) {
+          pwrite(((Map<?, ?>) obj).size()+1, scanner.nextLine());
+          }
         }
       }
     };
