@@ -1,1 +1,3 @@
-you have to create at least 1 entry in the firebase database with a key that is **NOT** 1
+- change key.json
+- the post function in main
+- FirebaseService.java 

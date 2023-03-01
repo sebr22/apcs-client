@@ -19,24 +19,31 @@ import java.util.*;
 public class Main {
   public static Object obj;
   public static ArrayList<String> list = new ArrayList<String>();
+  public static Student user = new Student();
 
   public static void update() {
-ArrayList<String> temp = new ArrayList<>();
-// get all the values from the HashMap
-Collection<ArrayList<String>> values = ((HashMap<String, ArrayList<String>>) obj).values();
-for (ArrayList<String> value : values) {
-  // check if the value has at least two elements
-  if (value.size() >= 2) {
-    // get the second element and add it to list
-    String second = value.get(1);
-    temp.add(second);
-  }
-}
+    ArrayList<String> temp = new ArrayList<>();
+    // get all the values from the HashMap
+    Collection<ArrayList<String>> values = ((HashMap<String, ArrayList<String>>) obj).values();
+    for (ArrayList<String> value : values) {
+      // check if the value has at least two elements
+      if (value.size() >= 2) {
+        // get the second element and add it to list
+        String second = value.get(1);
+        temp.add(second);
+      }
+    }
     // ONLY ADDS NEW ELEMENTS
-    temp.removeAll(list);
-    list.addAll(temp);
-
-    System.out.println(list);
+    if (list.size() <= temp.size()) {
+      temp.removeAll(list);
+      list.addAll(temp);
+    } else {
+      list.clear();
+    }
+    for (String x : temp) {
+      System.out.println(user.decode(x));
+    }
+    // System.out.println(list +" "+ temp);
   }
 
   public static void main(String[] args) {
@@ -50,7 +57,7 @@ for (ArrayList<String> value : values) {
       public void run() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-          post(scanner.nextLine());
+          post(user.encode(scanner.nextLine()));
         }
       }
     };
@@ -68,12 +75,11 @@ for (ArrayList<String> value : values) {
 
   public static void post(String str) {
     try {
+      list.add(str);
       HttpClient client = HttpClientBuilder.create().build();
       HttpPost post = new HttpPost("https://apcs-d25a1-default-rtdb.firebaseio.com/.json");
-      // post.setHeader("Content-Type", "application/x-www-form-urlencoded");
       StringEntity entity = new StringEntity("{\"1\": \"" + str + "\"}");
       post.setEntity(entity);
-
       HttpResponse response = client.execute(post);
     } catch (Exception e) {
       System.out.println("THERE WAS AN ERROR");
